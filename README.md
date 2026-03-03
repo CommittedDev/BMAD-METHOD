@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/bmad-raven.png" alt="BMAD-RAVEN" width="400" />
+  <img src="docs/bmad-raven_nbg.png" alt="BMAD-RAVEN" width="400" />
 </p>
 
 <h1 align="center">BMAD-RAVEN</h1>
