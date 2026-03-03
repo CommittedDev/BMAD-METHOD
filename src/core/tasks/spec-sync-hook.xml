@@ -1,0 +1,48 @@
+<task id="_bmad/core/tasks/spec-sync-hook.xml" name="Spec Sync Quick Check"
+  description="Lightweight drift check for git hook integration. Returns CLEAN or DRIFT_DETECTED summary. Use for automated pre-commit or pre-push validation.">
+
+  <objective>Quick check if recent code changes have drifted from specifications, without full analysis</objective>
+
+  <inputs>
+    <input name="changed_files" required="true" desc="List of files changed in the commit (from git diff --name-only)" />
+    <input name="commit_message" required="false" desc="Commit message for context" />
+    <input name="planning_artifacts" required="true" desc="Path to planning artifacts directory" />
+  </inputs>
+
+  <llm critical="true">
+    <mandate>This is a QUICK check - do NOT perform full drift analysis</mandate>
+    <mandate>Focus only on obvious mismatches between changed files and spec documents</mandate>
+    <mandate>Must complete in under 30 seconds - no deep analysis</mandate>
+  </llm>
+
+  <flow>
+    <step n="1" title="Categorize Changed Files">
+      <action>Classify each changed file into categories:</action>
+      <action>- API routes / endpoints → check against architecture API section</action>
+      <action>- Database models / migrations → check against architecture data model</action>
+      <action>- Package dependencies → check against architecture technology constraints</action>
+      <action>- Configuration files → check against architecture deployment section</action>
+      <action>- UI components → check against UX design (if available)</action>
+      <action>- Other → skip (no quick-check applicable)</action>
+    </step>
+
+    <step n="2" title="Quick Drift Scan">
+      <action>For each categorized file, do a lightweight check:</action>
+      <action>- Are new API routes reflected in architecture API specs?</action>
+      <action>- Are new dependencies in the approved technology list?</action>
+      <action>- Are database changes reflected in the data model?</action>
+      <action>- Are new UI components mentioned in UX design?</action>
+      <action>Note: This is pattern-matching, not deep semantic analysis</action>
+    </step>
+
+    <step n="3" title="Report Result">
+      <check if="no potential drift detected">
+        <action>Output: CLEAN - No obvious spec drift detected in changed files</action>
+      </check>
+      <check if="potential drift detected">
+        <action>Output: DRIFT_DETECTED - [brief description of potential drift areas]</action>
+        <action>Suggest: Run full Spec-Code Sync (SC) for detailed analysis</action>
+      </check>
+    </step>
+  </flow>
+</task>

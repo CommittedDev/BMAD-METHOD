@@ -9,6 +9,7 @@ communication_language: "{config_source}:communication_language"
 date: system-generated
 implementation_artifacts: "{config_source}:implementation_artifacts"
 planning_artifacts: "{config_source}:planning_artifacts"
+governance_artifacts: "{config_source}:governance_artifacts"
 
 # Workflow components
 installed_path: "{project-root}/_bmad/bmm/workflows/4-implementation/sprint-planning"
@@ -41,6 +42,10 @@ input_file_patterns:
     description: "All epics with user stories"
     whole: "{planning_artifacts}/*epic*.md"
     sharded: "{planning_artifacts}/*epic*/*.md"
+    load_strategy: "FULL_LOAD"
+  constitution:
+    description: "Project constitution for governance policies and quality gates"
+    whole: "{governance_artifacts}/constitution.md"
     load_strategy: "FULL_LOAD"
 
 # Output configuration

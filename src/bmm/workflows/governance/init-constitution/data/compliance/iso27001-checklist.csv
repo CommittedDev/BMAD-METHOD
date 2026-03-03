@@ -1,0 +1,15 @@
+id,requirement,category,bmad_artifact,verification_method,status
+ISO-A5,"Information Security Policies - provide management direction and support for information security",Organizational Controls,constitution section 1 (Org Directives),Review organizational security directives,pending
+ISO-A6,"Organization of Information Security - establish management framework for implementation",Organizational Controls,constitution + governance agent,Review governance structure and constitution hierarchy,pending
+ISO-A7,"Human Resource Security - ensure employees and contractors understand responsibilities",People Controls,constitution section 1.1 (Team AI Directives),Review team directive policies,pending
+ISO-A8.1,"Asset Management - identify organizational assets and define protection responsibilities",Asset Controls,architecture document + project context,Review asset inventory in architecture,pending
+ISO-A8.2,"Information Classification - ensure information receives appropriate level of protection",Asset Controls,constitution section 1.3 (Security Policy),Review data classification requirements,pending
+ISO-A8.3,"Media Handling - prevent unauthorized disclosure modification removal or destruction",Asset Controls,constitution section 2.4 (Deployment),Review data handling and retention policies,pending
+ISO-A9,"Access Control - limit access to information and information processing facilities",Access Controls,constitution section 1.3 + architecture,Review access control policies and implementation,pending
+ISO-A10,"Cryptography - ensure proper and effective use of cryptography",Cryptographic Controls,constitution section 1.3 (encryption),Review encryption requirements,pending
+ISO-A12,"Operations Security - ensure correct and secure operations of information processing",Operations Controls,constitution section 2.4 + quality gates,Review operational security policies and quality gates,pending
+ISO-A13,"Communications Security - ensure protection of information in networks",Communications Controls,architecture (network/API section),Review network security architecture,pending
+ISO-A14,"System Acquisition Development and Maintenance - ensure security is integral part of information systems",Development Controls,quality gates + code review workflow,Review development quality gates and review processes,pending
+ISO-A16,"Information Security Incident Management - ensure consistent approach to management of incidents",Incident Controls,constitution section 2.4,Review incident management procedures,pending
+ISO-A17,"Business Continuity Management - ensure information security continuity embedded in BCM",Continuity Controls,architecture (reliability section),Review business continuity architecture,pending
+ISO-A18,"Compliance - avoid breaches of legal statutory regulatory or contractual obligations",Compliance Controls,constitution section 4 (Compliance Requirements),Review compliance framework mappings,pending

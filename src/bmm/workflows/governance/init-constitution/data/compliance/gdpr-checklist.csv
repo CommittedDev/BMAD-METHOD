@@ -1,0 +1,15 @@
+id,requirement,category,bmad_artifact,verification_method,status
+GDPR-Art5,"Principles relating to processing of personal data (lawfulness fairness transparency purpose limitation data minimization accuracy storage limitation integrity)",Processing Principles,constitution section 1.3 (Security and Privacy),Review data processing principles in security policy,pending
+GDPR-Art6,"Lawfulness of processing - establish legal basis for each processing activity",Lawful Basis,PRD + constitution,Review data processing justifications in PRD and constitution,pending
+GDPR-Art7,"Conditions for consent - demonstrate valid consent where consent is the legal basis",Consent,PRD (user journeys) + UX design,Review consent flows in PRD and UX design,pending
+GDPR-Art12,"Transparent information communication and modalities for exercising data subject rights",Data Subject Rights,PRD + UX design,Review privacy notice and rights exercise UI,pending
+GDPR-Art13,"Information to be provided where personal data are collected from the data subject",Data Subject Rights,PRD + UX design,Review data collection disclosure requirements,pending
+GDPR-Art15,"Right of access by the data subject",Data Subject Rights,PRD (functional requirements),Review data access feature requirements,pending
+GDPR-Art17,"Right to erasure (right to be forgotten)",Data Subject Rights,PRD + architecture,Review data deletion capability in requirements and architecture,pending
+GDPR-Art20,"Right to data portability",Data Subject Rights,PRD + architecture (API design),Review data export capability,pending
+GDPR-Art25,"Data protection by design and by default",Privacy by Design,architecture + constitution,Review privacy-by-design in architecture decisions and governance policies,pending
+GDPR-Art28,"Processor - define obligations when using data processors",Processor Requirements,constitution section 2.1 (Technology Constraints),Review third-party data processor policies,pending
+GDPR-Art30,"Records of processing activities",Accountability,session traces + audit trails,Review trace and audit trail configuration for processing records,pending
+GDPR-Art32,"Security of processing - implement appropriate technical and organizational measures",Security,constitution section 1.3 + architecture,Review security measures in constitution and architecture,pending
+GDPR-Art33,"Notification of personal data breach to supervisory authority",Breach Notification,constitution section 2.4 (Deployment),Review breach notification procedures,pending
+GDPR-Art35,"Data protection impact assessment",DPIA,PRD risk sections + governance-validate,Review DPIA process and triggers,pending

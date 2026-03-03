@@ -1,0 +1,57 @@
+<task id="_bmad/core/tasks/cost-tracker.xml" name="Cost Tracker"
+  description="Track and report LLM token usage and estimated costs. Use when the user says 'show costs' or 'track budget' or 'cost dashboard'.">
+
+  <objective>Track token usage per workflow, report estimated costs, and alert on budget thresholds</objective>
+
+  <inputs>
+    <input name="action" required="true" desc="report | set-budget | reset" />
+    <input name="budget_limit" required="false" desc="Monthly budget limit in USD (for set-budget action)" />
+    <input name="governance_artifacts" required="true" desc="Path to governance artifacts directory" />
+  </inputs>
+
+  <flow>
+    <step n="1" title="Load or Initialize Cost Log">
+      <action>Check for existing cost log at {governance_artifacts}/cost-log.yaml</action>
+      <check if="no cost log exists">
+        <action>Create new cost log with default structure:</action>
+        <action>budget: { monthly_limit: 0, currency: "USD" }</action>
+        <action>sessions: []</action>
+      </check>
+      <action>Load existing cost log</action>
+    </step>
+
+    <step n="2" title="Execute Requested Action">
+      <check if="action == 'report'">
+        <action>Aggregate token counts by: workflow name, agent, date</action>
+        <action>Calculate estimated costs using standard model pricing:</action>
+        <action>- Claude Sonnet: ~$3/M input, ~$15/M output tokens</action>
+        <action>- Claude Opus: ~$15/M input, ~$75/M output tokens</action>
+        <action>- Claude Haiku: ~$0.25/M input, ~$1.25/M output tokens</action>
+        <action>Display cost dashboard:</action>
+        <action>- Total sessions this month</action>
+        <action>- Estimated total cost this month</action>
+        <action>- Cost breakdown by workflow</action>
+        <action>- Budget remaining (if budget is set)</action>
+        <action>- Cost trend (increasing/decreasing/stable)</action>
+      </check>
+
+      <check if="action == 'set-budget'">
+        <action>Update monthly_limit in cost log to {{budget_limit}}</action>
+        <action>Calculate remaining budget for current month</action>
+        <action>Report: Budget set to ${{budget_limit}}/month. $X remaining this month.</action>
+      </check>
+
+      <check if="action == 'reset'">
+        <ask>This will clear all cost tracking data. Are you sure? [Y/N]</ask>
+        <check if="user confirmed">
+          <action>Reset cost log to default structure</action>
+          <action>Report: Cost tracking data has been reset.</action>
+        </check>
+      </check>
+    </step>
+  </flow>
+
+  <note>Cost estimates are approximate based on standard API pricing. Actual costs depend on
+    your API plan, caching, and prompt optimization. This tracker provides directional guidance,
+    not precise billing data.</note>
+</task>

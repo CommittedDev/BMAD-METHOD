@@ -1,0 +1,15 @@
+id,requirement,category,bmad_artifact,verification_method,status
+HIPAA-164.308a1,"Security Management Process - implement policies and procedures to prevent detect contain and correct security violations",Administrative Safeguards,constitution + quality gates,Review constitution security policies and quality gate enforcement,pending
+HIPAA-164.308a3,"Workforce Security - implement policies ensuring appropriate access to ePHI",Administrative Safeguards,constitution section 1.3 (Security Policy),Review access control and authorization policies,pending
+HIPAA-164.308a4,"Information Access Management - implement policies authorizing access to ePHI",Administrative Safeguards,constitution section 1.3 + architecture,Review access management in security policy and architecture,pending
+HIPAA-164.308a5,"Security Awareness and Training - implement security awareness and training program",Administrative Safeguards,governance-sidecar standards,Review governance standards for training requirements,pending
+HIPAA-164.308a6,"Security Incident Procedures - implement policies to address security incidents",Administrative Safeguards,constitution section 2.4 (Deployment),Review incident response procedures,pending
+HIPAA-164.308a7,"Contingency Plan - establish policies for responding to emergencies",Administrative Safeguards,constitution section 2.4 + architecture,Review disaster recovery and backup policies,pending
+HIPAA-164.308a8,"Evaluation - perform periodic technical and nontechnical evaluation",Administrative Safeguards,governance-validate workflow,Run GV workflow periodically,pending
+HIPAA-164.310a1,"Facility Access Controls - limit physical access to electronic information systems",Physical Safeguards,architecture document (deployment section),Review infrastructure access controls,pending
+HIPAA-164.310b,"Workstation Use - implement policies for proper workstation use",Physical Safeguards,constitution section 1 (Org Directives),Review workstation security policies,pending
+HIPAA-164.312a1,"Access Control - implement technical policies limiting access to ePHI",Technical Safeguards,architecture + constitution security policy,Review authentication and authorization implementation,pending
+HIPAA-164.312b,"Audit Controls - implement mechanisms to record and examine access to ePHI",Technical Safeguards,session traces + audit trail requirements,Review tracing and audit trail configuration,pending
+HIPAA-164.312c1,"Integrity Controls - implement policies to protect ePHI from improper alteration",Technical Safeguards,constitution section 1.3 + quality gates,Review data integrity controls and quality gates,pending
+HIPAA-164.312d,"Person or Entity Authentication - implement procedures to verify identity",Technical Safeguards,architecture (auth section),Review authentication architecture,pending
+HIPAA-164.312e1,"Transmission Security - implement measures to guard against unauthorized access during transmission",Technical Safeguards,constitution section 1.3 (encryption policy),Review encryption-in-transit requirements,pending

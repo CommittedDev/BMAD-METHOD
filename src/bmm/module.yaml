@@ -43,8 +43,36 @@ project_knowledge: # Artifacts from research, document-project output, other lon
   default: "docs"
   result: "{project-root}/{value}"
 
+governance_artifacts: # Constitution, audit trails, compliance artifacts
+  prompt: "Where should governance artifacts (constitution, audit trails) be stored?"
+  default: "{output_folder}/governance"
+  result: "{project-root}/{value}"
+
+trace_artifacts: # Session traces from workflow executions
+  prompt: "Where should session traces be stored?"
+  default: "{output_folder}/traces"
+  result: "{project-root}/{value}"
+
+enable_session_tracing:
+  prompt: "Enable automated session tracing for all workflows?"
+  default: true
+  result: "{value}"
+
+sync_quality_threshold:
+  prompt: "Quality gate threshold for SYNC mode (percentage, e.g. 80 means 80% coverage required)"
+  default: "80"
+  result: "{value}"
+
+async_quality_threshold:
+  prompt: "Quality gate threshold for ASYNC mode (percentage)"
+  default: "60"
+  result: "{value}"
+
 # Directories to create during installation (declarative, no code execution)
 directories:
   - "{planning_artifacts}"
   - "{implementation_artifacts}"
   - "{project_knowledge}"
+  - "{governance_artifacts}"
+  - "{trace_artifacts}"
+  - "{implementation_artifacts}/delegation"

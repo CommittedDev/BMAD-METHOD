@@ -1,0 +1,36 @@
+# Validate Constitution Workflow
+name: validate-constitution
+description: 'Validate constitution completeness, alignment, and internal consistency. Use when the user says "validate governance" or "check constitution"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+planning_artifacts: "{config_source}:planning_artifacts"
+governance_artifacts: "{config_source}:governance_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/governance/validate-constitution"
+instructions: "{installed_path}/instructions.md"
+validation: "{installed_path}/checklist.md"
+template: false
+
+# Smart input file references
+input_file_patterns:
+  constitution:
+    description: "Current project constitution"
+    whole: "{governance_artifacts}/constitution.md"
+    load_strategy: "FULL_LOAD"
+  architecture:
+    description: "Architecture for alignment validation"
+    whole: "{planning_artifacts}/*architecture*.md"
+    sharded: "{planning_artifacts}/*architecture*/*.md"
+    load_strategy: "FULL_LOAD"
+  prd:
+    description: "PRD for requirement alignment"
+    whole: "{planning_artifacts}/*prd*.md"
+    sharded: "{planning_artifacts}/*prd*/*.md"
+    load_strategy: "FULL_LOAD"

@@ -41,3 +41,7 @@ agent:
     - trigger: DP or fuzzy match on document-project
       workflow: "{project-root}/_bmad/bmm/workflows/document-project/workflow.yaml"
       description: "[DP] Document Project: Analyze an existing project to produce useful documentation for both human and LLM"
+
+    - trigger: LU or fuzzy match on levelup
+      workflow: "{project-root}/_bmad/bmm/workflows/knowledge-extraction/workflow.yaml"
+      description: "[LU] Levelup: Extract reusable knowledge from session traces and retrospectives for organizational learning"

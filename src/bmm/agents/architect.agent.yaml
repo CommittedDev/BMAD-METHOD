@@ -27,3 +27,7 @@ agent:
     - trigger: IR or fuzzy match on implementation-readiness
       exec: "{project-root}/_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/workflow.md"
       description: "[IR] Implementation Readiness: Ensure the PRD, UX, and Architecture and Epics and Stories List are all aligned"
+
+    - trigger: SC or fuzzy match on spec-code-sync
+      workflow: "{project-root}/_bmad/bmm/workflows/spec-code-sync/workflow.yaml"
+      description: "[SC] Spec-Code Sync: Detect drift between specifications and codebase, generate drift report"

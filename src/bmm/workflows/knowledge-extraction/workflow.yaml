@@ -1,0 +1,45 @@
+# Knowledge Extraction (Levelup) Workflow
+name: knowledge-extraction
+description: 'Extract reusable learnings from session traces and retrospectives. Use when the user says "levelup" or "extract knowledge" or "what did we learn"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+planning_artifacts: "{config_source}:planning_artifacts"
+implementation_artifacts: "{config_source}:implementation_artifacts"
+project_knowledge: "{config_source}:project_knowledge"
+trace_artifacts: "{config_source}:trace_artifacts"
+governance_artifacts: "{config_source}:governance_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/knowledge-extraction"
+instructions: "{installed_path}/instructions.md"
+template: "{installed_path}/template-knowledge-packet.md"
+
+data_files:
+  knowledge_categories: "{installed_path}/data/knowledge-categories.csv"
+
+# Smart input file references
+input_file_patterns:
+  traces:
+    description: "All session traces to analyze for patterns"
+    whole: "{trace_artifacts}/trace-*.md"
+    load_strategy: "FULL_LOAD"
+  retrospectives:
+    description: "All retrospectives for learning extraction"
+    whole: "{implementation_artifacts}/*retro*.md"
+    load_strategy: "FULL_LOAD"
+  constitution:
+    description: "Current constitution for proposed updates"
+    whole: "{governance_artifacts}/constitution.md"
+    load_strategy: "FULL_LOAD"
+  project_context:
+    description: "Project context for proposed updates"
+    whole: "**/project-context.md"
+    load_strategy: "FULL_LOAD"
+
+default_output_file: "{project_knowledge}/knowledge-packet-{{date}}.md"

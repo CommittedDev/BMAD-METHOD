@@ -1,0 +1,29 @@
+# Quality Gates Workflow
+name: quality-gates
+description: 'Define, review, or update quality gate configurations for SYNC and ASYNC execution modes. Use when the user says "configure quality gates" or "update gates"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+governance_artifacts: "{config_source}:governance_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/governance/quality-gates"
+instructions: "{installed_path}/instructions.md"
+template: false
+
+data_files:
+  gate_definitions: "{installed_path}/data/gate-definitions.csv"
+
+# Smart input file references
+input_file_patterns:
+  constitution:
+    description: "Current constitution containing quality gate definitions"
+    whole: "{governance_artifacts}/constitution.md"
+    load_strategy: "FULL_LOAD"
+
+default_output_file: "{governance_artifacts}/constitution.md"

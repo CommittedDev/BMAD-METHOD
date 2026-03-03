@@ -1,0 +1,77 @@
+<task id="_bmad/core/tasks/execution-mode.xml" name="Execution Mode Controller" internal="true">
+  <objective>Control workflow execution behavior based on SYNC/ASYNC/Adaptive mode settings from configuration</objective>
+
+  <llm critical="true">
+    <mandate>Execution mode MUST be resolved before any workflow step processing begins</mandate>
+    <mandate>ASYNC mode does NOT mean lower quality - it means different review cadence</mandate>
+    <mandate>Delegation context MUST be captured in ASYNC mode for audit trail</mandate>
+  </llm>
+
+  <protocols>
+    <protocol name="resolve_execution_mode" desc="Determine the active execution mode for this workflow run">
+      <flow>
+        <step n="1" title="Read Mode Configuration">
+          <action>Read execution_mode from core config (sync, async, or adaptive)</action>
+          <action>Read sync_quality_threshold and async_quality_threshold from bmm config</action>
+        </step>
+
+        <step n="2" title="Resolve Active Mode">
+          <check if="execution_mode == 'sync'">
+            <action>Set active_execution_mode = 'sync'</action>
+            <action>Set quality_threshold = sync_quality_threshold</action>
+            <action>Set review_cadence = 'per-step'</action>
+          </check>
+          <check if="execution_mode == 'async'">
+            <action>Set active_execution_mode = 'async'</action>
+            <action>Set quality_threshold = async_quality_threshold</action>
+            <action>Set review_cadence = 'consolidated'</action>
+          </check>
+          <check if="execution_mode == 'adaptive'">
+            <action>Evaluate task complexity based on: number of input documents loaded, number of workflow steps, whether template has 5+ sections</action>
+            <action>If high complexity (many inputs, many steps) → Set mode to 'sync'</action>
+            <action>If low complexity (few inputs, few steps) → Set mode to 'async'</action>
+            <action>Set quality_threshold and review_cadence accordingly</action>
+          </check>
+        </step>
+
+        <step n="3" title="Report Mode">
+          <action>Briefly inform user: "Executing in {{active_execution_mode}} mode (quality threshold: {{quality_threshold}})"</action>
+        </step>
+      </flow>
+    </protocol>
+
+    <protocol name="create_delegation_context" desc="Capture delegation context for ASYNC mode audit trail">
+      <flow>
+        <step n="1" title="Initialize Delegation File">
+          <action>Create delegation context file at {implementation_artifacts}/delegation/{{workflow_name}}-{{date}}.yaml</action>
+          <action>Record: workflow name, execution mode, start time, inputs loaded, quality threshold</action>
+        </step>
+      </flow>
+    </protocol>
+
+    <protocol name="log_delegation_decision" desc="Record a decision point in the delegation context file">
+      <flow>
+        <step n="1" title="Append Decision">
+          <action>Append to delegation context: decision title, choice made, rationale, alternatives considered</action>
+        </step>
+      </flow>
+    </protocol>
+
+    <protocol name="generate_macro_review" desc="Generate consolidated review summary for ASYNC mode completion">
+      <flow>
+        <step n="1" title="Build Review Summary">
+          <action>Load the delegation context file for this workflow run</action>
+          <action>Summarize all decisions made during autonomous execution</action>
+          <action>List all artifacts produced with locations</action>
+          <action>Report quality gate results against async_quality_threshold</action>
+        </step>
+
+        <step n="2" title="Present Macro-Review">
+          <action>Present the consolidated review to user</action>
+          <action>Highlight any decisions that were borderline or may need human review</action>
+          <action>Ask user to approve or request revisions to specific sections</action>
+        </step>
+      </flow>
+    </protocol>
+  </protocols>
+</task>

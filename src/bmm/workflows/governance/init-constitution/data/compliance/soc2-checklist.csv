@@ -1,0 +1,13 @@
+id,requirement,category,bmad_artifact,verification_method,status
+SOC2-CC1.1,"Organization demonstrates commitment to integrity and ethical values",Control Environment,constitution section 1 (Org Directives),Manual review of constitution,pending
+SOC2-CC1.2,"Board of directors demonstrates independence and exercises oversight",Control Environment,constitution section 3 (Quality Gates),Review quality gate override policies,pending
+SOC2-CC2.1,"Organization internally communicates information to support functioning of internal control",Information and Communication,governance-validate workflow,Run GV workflow to verify constitution communication,pending
+SOC2-CC3.1,"Organization specifies objectives with sufficient clarity to enable identification of risks",Risk Assessment,PRD + Architecture documents,Review PRD risk sections and architecture decisions,pending
+SOC2-CC3.2,"Organization identifies and analyzes risks to achievement of objectives",Risk Assessment,implementation-readiness workflow output,Run IR workflow and review risk findings,pending
+SOC2-CC4.1,"Organization selects and develops monitoring activities",Monitoring Activities,session traces + retrospectives,Review trace artifacts and retrospective outputs,pending
+SOC2-CC5.1,"Organization selects and develops control activities that mitigate risks",Control Activities,quality gates + code review workflow,Review quality gate configurations and CR output,pending
+SOC2-CC6.1,"Organization implements logical access security over protected information assets",Logical and Physical Access,constitution section 1.3 (Security Policy),Review security policy for access control requirements,pending
+SOC2-CC6.2,"Organization manages credentials for infrastructure and software",Logical and Physical Access,constitution section 1.3 (Security Policy),Review secrets management policy,pending
+SOC2-CC7.1,"Organization identifies and assesses changes that could impact internal controls",Change Management,evolve-constitution workflow,Review constitution evolution log,pending
+SOC2-CC8.1,"Organization manages the inventory of information assets",Asset Management,architecture document + project context,Review architecture and context documents,pending
+SOC2-CC9.1,"Organization assesses and manages risks associated with vendors and partners",Vendor Management,constitution section 2.1 (Technology Constraints),Review approved technologies and vendor policies,pending

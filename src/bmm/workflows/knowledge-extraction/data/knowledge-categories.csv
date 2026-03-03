@@ -1,0 +1,11 @@
+category,target,description,example
+architecture-pattern,constitution,"Recurring architectural decisions that should become policy","Always use event-driven architecture for microservice communication"
+technology-choice,project-context,"Technology selections that consistently work well in this domain","PostgreSQL with pgvector for RAG applications"
+testing-strategy,project-context,"Testing approaches that consistently caught real bugs","Contract testing for API boundaries"
+process-improvement,constitution,"Process changes that improved velocity or quality","Requiring architecture review before epic creation"
+anti-pattern,constitution,"Approaches to explicitly prohibit based on negative outcomes","Never use ORM for complex reporting queries"
+code-convention,project-context,"Coding patterns to standardize across the project","Error handling with Result types instead of exceptions"
+security-practice,constitution,"Security patterns that should be mandatory","Input validation at API boundary, never in business logic"
+performance-insight,project-context,"Performance patterns discovered during implementation","Pagination required for any list endpoint returning 100+ items"
+ux-pattern,project-context,"UX decisions that tested well with users","Progressive disclosure for complex forms"
+workflow-improvement,constitution,"Improvements to the development workflow itself","Sprint planning should include dependency mapping step"

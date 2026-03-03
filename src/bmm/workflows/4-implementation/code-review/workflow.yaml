@@ -11,6 +11,7 @@ document_output_language: "{config_source}:document_output_language"
 date: system-generated
 planning_artifacts: "{config_source}:planning_artifacts"
 implementation_artifacts: "{config_source}:implementation_artifacts"
+governance_artifacts: "{config_source}:governance_artifacts"
 sprint_status: "{implementation_artifacts}/sprint-status.yaml"
 
 # Workflow components
@@ -41,3 +42,7 @@ input_file_patterns:
     sharded_index: "{planning_artifacts}/*epic*/index.md"
     sharded_single: "{planning_artifacts}/*epic*/epic-{{epic_num}}.md"
     load_strategy: "SELECTIVE_LOAD"
+  constitution:
+    description: "Project constitution for governance policies and quality gates"
+    whole: "{governance_artifacts}/constitution.md"
+    load_strategy: "FULL_LOAD"

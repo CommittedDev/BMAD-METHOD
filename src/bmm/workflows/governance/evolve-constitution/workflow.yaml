@@ -1,0 +1,26 @@
+# Evolve Constitution Workflow
+name: evolve-constitution
+description: 'Propose and track changes to the constitution based on lessons learned or new requirements. Use when the user says "update constitution" or "evolve governance"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+governance_artifacts: "{config_source}:governance_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/governance/evolve-constitution"
+instructions: "{installed_path}/instructions.md"
+template: false
+
+# Smart input file references
+input_file_patterns:
+  constitution:
+    description: "Current project constitution to evolve"
+    whole: "{governance_artifacts}/constitution.md"
+    load_strategy: "FULL_LOAD"
+
+default_output_file: "{governance_artifacts}/constitution.md"

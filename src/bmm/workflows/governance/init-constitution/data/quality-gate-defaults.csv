@@ -1,0 +1,9 @@
+gate_id,gate_name,sync_threshold,async_threshold,description,category
+QG-001,Test Coverage,80%,60%,"Minimum percentage of code covered by automated tests",testing
+QG-002,Code Review,per-step,consolidated,"When human review is required during workflow execution",review
+QG-003,Documentation Completeness,complete,essential,"Level of documentation required for artifacts produced",documentation
+QG-004,Security Scan,must-pass-all,must-pass-critical,"Which severity levels of security findings block progression",security
+QG-005,Lint/Format,zero-errors,zero-errors,"Code must pass all configured linters and formatters",coding
+QG-006,Architecture Alignment,full-check,spot-check,"Degree of verification against architecture constraints",architecture
+QG-007,Acceptance Criteria,100%,90%,"Percentage of acceptance criteria that must be met",requirements
+QG-008,Performance Budget,within-budget,within-2x-budget,"How strictly performance budgets are enforced",performance

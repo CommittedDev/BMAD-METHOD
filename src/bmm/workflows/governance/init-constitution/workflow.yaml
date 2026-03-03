@@ -1,0 +1,43 @@
+# Initialize Constitution Workflow
+name: init-constitution
+description: 'Create or bootstrap the project constitution with organizational policies and AI directives. Use when the user says "init governance" or "create constitution" or "setup governance"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+planning_artifacts: "{config_source}:planning_artifacts"
+governance_artifacts: "{config_source}:governance_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/governance/init-constitution"
+instructions: "{installed_path}/instructions.md"
+template: "{installed_path}/template-constitution.md"
+project_context: "**/project-context.md"
+
+# Data files for policy and compliance defaults
+data_files:
+  default_policies: "{installed_path}/data/default-policies.csv"
+  quality_gate_defaults: "{installed_path}/data/quality-gate-defaults.csv"
+  soc2_checklist: "{installed_path}/data/compliance/soc2-checklist.csv"
+  hipaa_checklist: "{installed_path}/data/compliance/hipaa-checklist.csv"
+  iso27001_checklist: "{installed_path}/data/compliance/iso27001-checklist.csv"
+  gdpr_checklist: "{installed_path}/data/compliance/gdpr-checklist.csv"
+
+# Smart input file references - load existing artifacts for alignment
+input_file_patterns:
+  architecture:
+    description: "System architecture for alignment with governance constraints"
+    whole: "{planning_artifacts}/*architecture*.md"
+    sharded: "{planning_artifacts}/*architecture*/*.md"
+    load_strategy: "FULL_LOAD"
+  prd:
+    description: "PRD for requirement-level policy mapping"
+    whole: "{planning_artifacts}/*prd*.md"
+    sharded: "{planning_artifacts}/*prd*/*.md"
+    load_strategy: "FULL_LOAD"
+
+default_output_file: "{governance_artifacts}/constitution.md"

@@ -1,0 +1,95 @@
+<task id="_bmad/core/tasks/session-trace.xml" name="Generate Session Trace"
+  description="Generate a structured session trace from workflow execution. Use at end of any workflow or when user says 'generate trace'.">
+
+  <objective>Create a 3-part narrative trace: Problem/Context, Key Decisions, Final Solution — providing a complete audit trail of workflow execution</objective>
+
+  <inputs>
+    <input name="workflow_name" required="true" desc="Name of the completed workflow" />
+    <input name="decisions_made" required="true" desc="List of decisions made during execution (from capture_decision protocol)" />
+    <input name="artifacts_produced" required="true" desc="List of output artifacts with paths" />
+    <input name="inputs_loaded" required="false" desc="List of input documents that were loaded" />
+    <input name="execution_mode" required="false" desc="SYNC or ASYNC execution mode used" />
+  </inputs>
+
+  <llm critical="true">
+    <mandate>Extract the narrative arc, not just a log dump — tell the STORY of this workflow execution</mandate>
+    <mandate>Every decision must have rationale and alternatives considered</mandate>
+    <mandate>Link evidence to specific files, spec sections, or user responses</mandate>
+    <mandate>Be concise but complete — traces should be scannable in under 2 minutes</mandate>
+  </llm>
+
+  <flow>
+    <step n="1" title="Gather Context">
+      <action>Collect workflow execution context from session memory:</action>
+      <action>- Workflow name and type (template-workflow or action-workflow)</action>
+      <action>- Execution mode used (SYNC/ASYNC)</action>
+      <action>- Input documents that were loaded (from discover_inputs)</action>
+      <action>- Quality gate thresholds that were active</action>
+      <action>If git context is available, extract recent commits and list affected files</action>
+    </step>
+
+    <step n="2" title="Build Trace Narrative">
+      <action>Structure the trace as a 3-part narrative using the session-trace template:</action>
+
+      <action>PART 1 - Problem/Context:</action>
+      <action>- What triggered this workflow (user command, sprint plan, etc.)</action>
+      <action>- What state the project was in at the time of execution</action>
+      <action>- What input documents were loaded and their key content</action>
+
+      <action>PART 2 - Key Decisions:</action>
+      <action>- Build a decision table from all decisions captured during execution</action>
+      <action>- Each row: Decision description, Category (architecture/technology/testing/process/security/ux), Choice made, Alternatives considered, Rationale, Evidence reference</action>
+      <action>- Include both explicit user decisions and agent recommendations that were accepted</action>
+
+      <action>PART 3 - Final Solution:</action>
+      <action>- List all artifacts produced with their file paths</action>
+      <action>- Summarize evidence trail (what connects decisions to outputs)</action>
+      <action>- List files created or modified during the session</action>
+      <action>- Report quality gate results if applicable</action>
+    </step>
+
+    <step n="3" title="Validate and Save">
+      <action>Validate trace structure completeness:</action>
+      <action>- All 3 parts present with meaningful content</action>
+      <action>- Decision table has at least one entry</action>
+      <action>- Artifacts list is not empty</action>
+      <action>Generate a unique trace ID: trace-{{workflow_name}}-{{date}}</action>
+      <action>Save to {trace_artifacts}/trace-{{workflow_name}}-{{date}}.md</action>
+      <action>Report: Session trace saved. Use [LU] Levelup to extract reusable knowledge from traces.</action>
+    </step>
+  </flow>
+
+  <output-format>
+    <example>
+# Session Trace: {{workflow_name}}
+
+**Trace ID:** trace-{{workflow_name}}-{{date}}
+**Execution Mode:** {{execution_mode}}
+**Agent:** {{agent_name}}
+**Date:** {{date}}
+
+## 1. Problem / Context
+
+- **Trigger:** User initiated Create Architecture workflow
+- **Project State:** PRD complete, UX design approved, ready for technical design
+- **Inputs Loaded:**
+  - PRD (5 sections, 2,400 words)
+  - UX Design (wireframes + interaction specs)
+  - Project Context (brownfield, existing API)
+
+## 2. Key Decisions
+
+| # | Decision | Category | Choice | Alternatives | Rationale | Evidence |
+|---|----------|----------|--------|-------------|-----------|----------|
+| 1 | Database selection | technology | PostgreSQL | MongoDB, DynamoDB | Relational data with complex queries | PRD Section 3.2 |
+| 2 | API pattern | architecture | REST with OpenAPI | GraphQL, gRPC | Team expertise + existing API compatibility | Project context |
+
+## 3. Final Solution
+
+- **Artifacts Produced:**
+  - `_bmad-output/planning-artifacts/architecture.md`
+- **Evidence Trail:** Decisions 1-2 directly map to Architecture sections 4 and 5
+- **Quality Gate Results:** SYNC mode, all gates passed
+    </example>
+  </output-format>
+</task>

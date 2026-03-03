@@ -1,0 +1,24 @@
+# Delegation Review Workflow
+name: delegation-review
+description: 'Review delegated async workflow results in consolidated macro-review. Use when the user says "review delegated work" or "delegation review"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+implementation_artifacts: "{config_source}:implementation_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/delegation-review"
+instructions: "{installed_path}/instructions.md"
+template: false
+
+# Smart input file references - load all delegation context files
+input_file_patterns:
+  delegation_contexts:
+    description: "Delegation context files from ASYNC workflow executions"
+    whole: "{implementation_artifacts}/delegation/*.yaml"
+    load_strategy: "FULL_LOAD"

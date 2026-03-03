@@ -1,0 +1,45 @@
+# Spec-Code Synchronization Workflow
+name: spec-code-sync
+description: 'Detect and report drift between specifications and code. Use when the user says "check spec sync" or "detect drift" or "are specs up to date"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+planning_artifacts: "{config_source}:planning_artifacts"
+implementation_artifacts: "{config_source}:implementation_artifacts"
+
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/spec-code-sync"
+instructions: "{installed_path}/instructions.md"
+template: "{installed_path}/template-drift-report.md"
+validation: "{installed_path}/checklist-drift.md"
+project_context: "**/project-context.md"
+
+# Smart input file references
+input_file_patterns:
+  prd:
+    description: "PRD for requirements drift check"
+    whole: "{planning_artifacts}/*prd*.md"
+    sharded: "{planning_artifacts}/*prd*/*.md"
+    load_strategy: "FULL_LOAD"
+  architecture:
+    description: "Architecture for structure drift check"
+    whole: "{planning_artifacts}/*architecture*.md"
+    sharded: "{planning_artifacts}/*architecture*/*.md"
+    load_strategy: "FULL_LOAD"
+  epics:
+    description: "Epics for implementation drift check"
+    whole: "{planning_artifacts}/*epic*.md"
+    sharded: "{planning_artifacts}/*epic*/*.md"
+    load_strategy: "FULL_LOAD"
+  ux_design:
+    description: "UX design for UI drift check"
+    whole: "{planning_artifacts}/*ux*.md"
+    sharded: "{planning_artifacts}/*ux*/*.md"
+    load_strategy: "FULL_LOAD"
+
+default_output_file: "{planning_artifacts}/drift-report-{{date}}.md"

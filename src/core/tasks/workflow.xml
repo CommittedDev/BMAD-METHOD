@@ -41,6 +41,23 @@
         <action>If template-workflow → Write template to output file with placeholders</action>
         <action>If action-workflow → Skip file creation</action>
       </substep>
+
+      <substep n="1d" title="Resolve Execution Mode">
+        <action>Read execution_mode from core config (sync, async, or adaptive)</action>
+        <check if="execution_mode == 'sync'">
+          <action>Set active_execution_mode = 'sync', review_cadence = 'per-step'</action>
+        </check>
+        <check if="execution_mode == 'async'">
+          <action>Set active_execution_mode = 'async', review_cadence = 'consolidated'</action>
+          <action>Initialize delegation context file at {implementation_artifacts}/delegation/{{workflow_name}}-{{date}}.yaml</action>
+        </check>
+        <check if="execution_mode == 'adaptive'">
+          <action>Evaluate complexity: count input documents, workflow steps, template sections</action>
+          <action>High complexity → sync mode; Low complexity → async mode</action>
+        </check>
+        <action>Initialize session_decisions = [] for decision capture during execution</action>
+        <note>Active mode stored in {{active_execution_mode}} — affects step 2c behavior</note>
+      </substep>
     </step>
 
     <step n="2" title="Process Each Instruction Step in Order">
@@ -72,22 +89,29 @@
           <mandate>Generate content for this section</mandate>
           <mandate>Save to file (Write first time, Edit subsequent)</mandate>
           <action>Display generated content</action>
-          <ask> [a] Advanced Elicitation, [c] Continue, [p] Party-Mode, [y] YOLO the rest of this document only. WAIT for response. <if
-              response="a">
-              <action>Start the advanced elicitation workflow {project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml</action>
-            </if>
-            <if
-              response="c">
-              <action>Continue to next step</action>
-            </if>
-            <if response="p">
-              <action>Start the party-mode workflow {project-root}/_bmad/core/workflows/party-mode/workflow.md</action>
-            </if>
-            <if
-              response="y">
-              <action>Enter #yolo mode for the rest of the workflow</action>
-            </if>
-          </ask>
+          <action>Capture any decisions made in this section to session_decisions via capture_decision protocol</action>
+          <check if="active_execution_mode == 'async' OR #yolo mode active">
+            <action>Auto-continue without user prompt (ASYNC delegates review to macro-review at completion)</action>
+            <action if="active_execution_mode == 'async'">Log decision point to delegation context file</action>
+          </check>
+          <check if="active_execution_mode == 'sync' AND NOT #yolo mode">
+            <ask> [a] Advanced Elicitation, [c] Continue, [p] Party-Mode, [y] YOLO the rest of this document only. WAIT for response. <if
+                response="a">
+                <action>Start the advanced elicitation workflow {project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml</action>
+              </if>
+              <if
+                response="c">
+                <action>Continue to next step</action>
+              </if>
+              <if response="p">
+                <action>Start the party-mode workflow {project-root}/_bmad/core/workflows/party-mode/workflow.md</action>
+              </if>
+              <if
+                response="y">
+                <action>Enter #yolo mode for the rest of the workflow</action>
+              </if>
+            </ask>
+          </check>
         </if>
       </substep>
 
@@ -99,6 +123,24 @@
 
     <step n="3" title="Completion">
       <check>Confirm document saved to output path</check>
+
+      <substep n="3a" title="ASYNC Macro-Review" if="active_execution_mode == 'async'">
+        <action>Generate consolidated macro-review summary of all decisions made during autonomous execution</action>
+        <action>Present macro-review to user with all decision points, artifacts produced, and quality gate results</action>
+        <action>Highlight any borderline decisions that may warrant human review</action>
+        <ask>Review complete. [A] Approve all, [R] Request revision on specific items, [D] Re-run in SYNC mode</ask>
+      </substep>
+
+      <substep n="3b" title="Session Trace Generation" if="enable_session_tracing is true in config">
+        <action>Generate session trace by invoking _bmad/core/tasks/session-trace.xml with:</action>
+        <action>- workflow_name: name of the completed workflow</action>
+        <action>- decisions_made: session_decisions array captured during execution</action>
+        <action>- artifacts_produced: list of output files created</action>
+        <action>- inputs_loaded: list of input documents discovered</action>
+        <action>- execution_mode: active_execution_mode</action>
+        <action>Save trace to {trace_artifacts}/trace-{{workflow_name}}-{{date}}.md</action>
+      </substep>
+
       <action>Report workflow completion</action>
     </step>
   </flow>
@@ -107,6 +149,12 @@
     <mode name="normal">Full user interaction and confirmation of EVERY step at EVERY template output - NO EXCEPTIONS except yolo MODE</mode>
     <mode name="yolo">Skip all confirmations and elicitation, minimize prompts and try to produce all of the workflow automatically by
       simulating the remaining discussions with an simulated expert user</mode>
+    <mode name="sync">SYNC execution: Human-in-the-loop review at each template-output checkpoint. Higher quality thresholds.
+      Equivalent to normal mode with explicit quality gate enforcement from constitution.</mode>
+    <mode name="async">ASYNC execution: Agent proceeds autonomously through all steps. Delegation context captured for audit.
+      Macro-review presented at workflow completion. Lower quality thresholds but full traceability.</mode>
+    <mode name="adaptive">Agent evaluates task complexity at initialization and selects sync or async mode automatically.
+      High complexity (many inputs, many steps) defaults to sync. Low complexity defaults to async.</mode>
   </execution-modes>
 
   <supported-tags desc="Instructions can use these tags">
@@ -218,6 +266,27 @@
         </step>
       </flow>
 
+    </protocol>
+
+    <protocol name="capture_decision" desc="Record a decision point during workflow execution for session tracing">
+      <objective>Append a decision record to session_decisions array for later inclusion in session trace</objective>
+
+      <flow>
+        <step n="1" title="Record Decision">
+          <action>Identify the decision that was just made (explicit user choice or accepted recommendation)</action>
+          <action>Categorize as: architecture, technology, testing, process, security, or ux</action>
+          <action>Append to session_decisions array:</action>
+          <action>- decision_title: Brief description of the decision</action>
+          <action>- category: One of the categories above</action>
+          <action>- choice: What was chosen</action>
+          <action>- alternatives: What other options were considered</action>
+          <action>- rationale: Why this choice was made</action>
+          <action>- evidence: Reference to spec section, user input, or data that informed the decision</action>
+        </step>
+      </flow>
+
+      <note>This protocol is invoked automatically at template-output checkpoints and can be invoked explicitly
+        at any significant decision point in workflow instructions</note>
     </protocol>
   </protocols>
 
